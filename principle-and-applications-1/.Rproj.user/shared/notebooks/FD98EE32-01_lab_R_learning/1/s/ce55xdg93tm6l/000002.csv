@@ -1,0 +1,8 @@
+"0","charvar <- c(""Pradeep"", ""Paladugula"", ""nani"")"
+"0","print(charvar)"
+"1","[1]"
+"1"," ""Pradeep""   "
+"1"," ""Paladugula"""
+"1"," ""nani""      "
+"1","
+"
