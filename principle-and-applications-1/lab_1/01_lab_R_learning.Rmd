@@ -2,11 +2,12 @@
 title: "Lab 01 R Learning"
 author: "Pradeep Paladugula"
 date: "`r Sys.Date()`"
-output: 'html_documnent'
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
 ```
 
 # Logical Operators: 
@@ -199,7 +200,7 @@ print(simfun(airtemp))
 29.	Load the car library.
 
 ```{r q29}
-install.packages("ggplot2")
+install.packages("ggplot2", repos = "http://cran.rstudio.com/")
 install.packages("car")
 install.packages("ez")
 library(car)
