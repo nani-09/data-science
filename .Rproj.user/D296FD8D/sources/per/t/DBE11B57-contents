@@ -2,7 +2,7 @@
 title: "Lab 01 R Learning"
 author: "Pradeep Paladugula"
 date: "`r Sys.Date()`"
-output: 'html_documnent'
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -50,7 +50,6 @@ print(potato)
 ```{r q6}
 charvar <- c("Pradeep", "Paladugla", "nani")
 class(charvar)
-a = 1; b = 2
 c <- a < b
 class(c)
 navar <- NA
@@ -128,17 +127,13 @@ print(airwind[3])
 18.	Use subset() to do the same thing. Notice the difference in the output.
 
 ```{r q16-18}
-aq <- data.frame(c(1:10))
-airozone <- airquality$Ozone
-print(aq[airozone > 20, ])
-subset(aq, airozone > 20)
+
 ```
 
 19.	Create a TooWindy variable inside aq, which is a logical variable that is TRUE if Wind is greater than 10, and FALSE otherwise.
 
 ```{r q19}
-airquality$TooWindy <- airwind > 10
-print(airquality$TooWindy)
+
 ```
 
 20.	Use the length() function to determine the number of observations in the airquality dataframe.
@@ -157,21 +152,12 @@ sd(airwind)
 22.	Make a table of the Temp values.
 
 ```{r q22}
-airtemp <- airquality$Temp
-temp <- table(airtemp)
-print(temp)
+
 ```
 
 23.	Make a histogram of the Ozone column. Is it a normal distribution? Why or why not?
 
 ```{r q23}
-hist(airozone)
-qqnorm(airozone)
-qqline(airozone, col="blue")
-# The balck dots are actual data. If those data are adhere/fall to the blue line then the theory is called the normal distribution. As per the current OZone data, the black dots are not falling on to the blue line, the theory is not a normal distribution.
-
-#Reference: http://www.psychwiki.com/wiki/How_do_I_determine_whether_my_data_are_normal%3F
-#Reference: http://www.r-tutor.com/r-introduction/vector/logical-index-vector
 
 ```
 
@@ -180,15 +166,13 @@ qqline(airozone, col="blue")
 24.	Make a simple function to calculate x + 6.
 
 ```{r q24}
-simfun <- function(x) {
-  return(x + 6)
-}
+
 ```
 
 25.	Use that function add 6 to the Temp column in airquality. 
 
 ```{r q25}
-print(simfun(airtemp))
+
 ```
 
 # Packages:
@@ -210,7 +194,5 @@ library(car)
 30. Import the csv file provided on Canvas. 
 
 ```{r q30}
-#file.exists("lab_R_learning.csv")
-df <- read.csv("lab_R_learning.csv")
-print(df)
+df <- read.csv("", hearder = FALSE)
 ```

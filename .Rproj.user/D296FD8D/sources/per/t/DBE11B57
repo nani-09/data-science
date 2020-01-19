@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1579459210772.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3702128941",
+    "id" : "DBE11B57",
+    "lastKnownWriteTime" : 1579458872,
+    "last_content_update" : 1579458872,
+    "path" : "~/Documents/GitHub/nani-data-science/principle-and-applications-1/01_lab_R_learning.Rmd",
+    "project_path" : "principle-and-applications-1/01_lab_R_learning.Rmd",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
