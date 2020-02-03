@@ -1,0 +1,33 @@
+---
+title: "Analytical Modal Lab-1"
+author: "Pradeep Paladugula"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width = 30, fig.height = 20)
+```
+
+```{r}
+source("http://www.openintro.org/stat/data/arbuthnot.R")
+boys<- arbuthnot$boys
+girls<- arbuthnot$girls
+total<- boys + girls
+year<- arbuthnot$year
+
+linegraph = function(x, y, z, xdata){
+  plot(xdata, x, type = "o", col = "red", xlab = "Years", ylab = "Values of boys, Girls and thier total value")
+  lines(xdata, y, type = "o", col = "blue")
+  lines(xdata, z, type = "o", col = "black")
+  title("Population of Boys and Girls")
+  axis(1, seq(1630, 1710, 1))
+  axis(2, seq(3000, 20000, 100))
+  legend(1704, 3200, legend=c("boys", "girls", "total"), col=c("red", "blue", "black"), lty = 1, lwd = 3, text.col = "black", bty = "f", cex = 2)
+}
+
+linegraph(boys, girls, total, year)
+
+```
+

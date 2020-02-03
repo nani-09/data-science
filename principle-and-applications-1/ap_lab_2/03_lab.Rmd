@@ -1,0 +1,211 @@
+---
+title: "Introduction to Data Analytics 1"
+author: "Pradeep Paladugula"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
+```
+
+# Part 1: Variables, Hypothesis, Designs
+
+*Title:* Offshore outsourcing: Its advantages, disadvantages, and effect on the American economy
+
+*Abstract*: The United States has trained some of the world's best computer programmers and technology experts. Despite all of this training, many businesses do not have a full understanding of information technology. As the importance of technology in the business world grows, many companies are wasting money on extensive technology projects. When problems arise, they expect that further investment will solve these issues. To prevent such problems, many companies have begun to outsource these functions in an effort to reduce costs and improve performance. The majority of these outsourced information technology and call center jobs are going to low-wage countries, such as India and China where English-speaking college graduates are being hired at substantially lower wages. The purpose of this study is to evaluate the positive and negative aspects of offshore outsourcing with a focus on the outsourcing markets in India and China, arguably the two most popular destinations for outsourcers. The cost savings associated with offshore outsourcing will be evaluated in relation to the security risks and other weakness of offshore outsourcing. In addition, an analysis of the number of jobs sent overseas versus the number of jobs created in the United States will be used to assess the effects that outsourcing is having on the American economy and job market. Finally, the value of jobs lost from the American economy will be compared to the value of jobs created. The goal of these analyses is to create a clear picture of this increasingly popular business strategy.
+
+Answer the following questions about the abstract above:
+
+1)	What is a potential hypothesis of the researchers?
+    
+    solution: The economy fluctuation and impact that the United States of America is seeing due to the company business startegies.
+
+2)	What is one of the independent variables?
+
+    a.	What type of variable is the independent variable?
+    
+    Solution: A clear Business strategy of creating better job market. (ex: clear measurements, statergies, Pridiction)
+
+3)	What is one of the dependent variables?
+
+    a.	What type of variable is the dependent variable?
+    
+    Solution: the terms that leads to decrease/increase of economy of the USA, excess ammount put in to issues etc.  (ex: Cost)
+    
+4)	What might cause some measurement error in this experiment?
+    
+    ex: When problems arise, they expect that further investment will solve these issues.
+
+    The above example would be one of the cause in this expeiment. Basically, wrong strategies, 
+
+5)	What type of research design is the experiment?
+
+    a.	Why?
+    
+    Solution: it is a correlational research design. For example "number of jobs sent overseas versus the number of jobs created in the United States" and the cost calcualtions included in the "value of jobs lost from the American economy and jobs created"
+
+6)	How might you measure the reliability of your dependent variable?
+
+    Solution: No major fluctutation of the value of cost to the workforce/ 
+
+7)	Is this study ecologically valid?
+    
+    solution: Yes, ecologically valid study.
+
+8)	Can this study claim cause and effect?
+
+    a.	Why/why not?
+
+9)	What type of data collection did the researchers use (please note that #5 is a different question)?
+    
+    Solution: It is a quantitative data.
+
+# Part 2: Use the assessment scores dataset (03_lab.csv) to answer these questions.
+
+The provided dataset includes the following information created to match the abstract:
+
+- Jobs: the percent of outsourced jobs for a call center.
+- Cost: one calculation of the cost savings for the business.
+- Cost2: a separate way to calculate cost savings for the business.
+- ID: an ID number for each business.
+- Where: where the jobs were outsourced to. 
+
+Calculate the following information:
+
+1)	Create a frequency table of the percent of outsourced jobs.
+
+```{r}
+ojdata <- read.csv("03_data.csv")
+ojfreq<- table(ojdata$jobs)
+ojfreq
+```
+
+2)	Create histograms of the two types of cost savings. You will want to add the breaks argument to the hist() function. This argument adds more bars to the histogram, which makes it easier to answer the following questions:
+
+`hist(dataset$column, breaks = 15)` 
+
+15 is a great number to pick, but it can be any number. For this assignment, try 15 to see a medium number of bars. 
+
+```{r}
+normlineplot = function(x, histgraph) {
+     m <- mean(x)
+     sd<- sqrt(var(x))
+     xaxis<- seq(min(c1), max(c1), length.out = 100)
+     yaxis<- dnorm( xaxis, mean = m, sd = sd)
+     yaxis<- yaxis * diff(histgraph$mids[1:2]) * length(c1)
+     plot(histgraph)
+     lines(xaxis, yaxis, col = "blue", lwd = 2)
+}
+
+c1<- ojdata$cost
+hc1<- hist(c1, breaks = 15, main = ("Histogram of Cost Savings"), xlab = "Cost", col = "yellow")
+normlineplot(c1, hc1)
+```
+```{r}
+c2<- ojdata$cost2
+hc2<- hist(c2, breaks = 15, main = ("Histogram of Cost2 Savings"), xlab = "Cost2", col = "yellow")
+normlineplot(c2, hc2) #Failed to produce the nomral line histogram grap. Still working on it.
+```
+
+3)	Examine these histograms to answer the following questions:
+
+    a.	Which cost savings appears the most normal?
+    #Cost savings  apprears to be noral
+    ```{r}
+    qqnorm(c2);qqline(c2)
+    qqnorm(c1);qqline(c1)
+    
+    #reference: https://stackoverflow.com/questions/28734985/r-qqplot-argument-y-is-missing-error/40624387
+    
+    #Solution: As most of the Cost2 data thickly falls on the normality line, and also from the prvious question pictures we can conclude from seeing he bell curve that the Cost2 data is said to be more normal.
+    ```
+    
+    b.	Which cost savings data is multimodal?
+    ```{r}
+    install.packages("LaplacesDemon")
+    is.multimodal(c1)
+    is.multimodal(c2)
+    
+    #multimodal: whether data has the multiple modes
+    
+    #NO COST DATA ARE MULTIMODAL 
+    
+    ```
+    
+    c.	Which cost savings data looks the most skewed (and in which direction positive or negative)?  
+    ```{r}
+    library(e1071)
+    skewness(c1) #ojdata$cost is most skewed as it is a negative skewed (towards left)
+    skewness(c2) #ojdata$cost positive skewed (towards right)
+    ```
+    
+    d.	Which cost savings data looks the most kurtotic?
+    
+4)	Calculate the z-scores for each cost savings, so they are all on the same scale.
+
+```{r}
+#reference: https://stats.seandolinar.com/calculating-z-scores-with-r/
+#reference: https://www.r-bloggers.com/r-tutorial-series-centering-variables-and-generating-z-scores-with-the-scale-function/
+# the means and standard deviations of these measurements should all be completely different. In order to get the distributions standardized, the measurements can be changed into z-scores.
+#Z-scores are a stand-in for the actual measurement, and they represent the distance of a value from the mean measured in standard deviations. So a z-score of 2.0 means the measurement is 2 standard deviations away from the mean.
+
+zscoredata = function(x, value) {
+    m<- mean(x)
+    varx= function(x){sqrt(var(x)*(length(x)-1)/length(x))}
+    zs = function(x, y, z){x-y/z}
+    zsx<- zs(value, m, varx(x))
+    return(zsx)
+}
+
+length(c2)
+
+zscoredata(c2, 200)  #Still working onfiguring this out.
+
+zsc1<- scale(c1, center = TRUE, scale = TRUE)
+zsc2<- scale(c2, center = TRUE, scale = TRUE)
+```
+
+6)	How many of the cost saving scores were more extreme than 95% of the data (i.e., number of z-scores at a *p* < .05)?
+
+```{r}
+summary(zsc1<.05)
+summary(zsc2<.05)
+```
+
+    a.	Cost Savings 1: 101
+    
+    c.	Cost Savings 2: 110
+    
+7)	Which business had:
+
+    a.	the highest cost savings?
+    
+    ```{r}
+    which.max(c1)
+    which.max(c2)
+    
+    # Highest Cost Saving 1: S100
+    # Highest Cost Saving 2: S97
+    
+    ```
+    
+    Highest Cost Saving 1: S100
+    Highest Cost Saving 2: S97
+    
+    b.	the the lowest cost savings?
+    ```{r}
+    which.min(c1) 
+    which.min(c2) 
+    ```
+    
+    lowest Cost Saving 1: S190
+    lowest Cost Saving 2: S92
+    
+    c.  Use both cost savings columns and find the ID number of the business with the lowest and highest z-score.
+```{r}
+c1[which.max(scale(c1 ,center=TRUE,scale=TRUE))] #: S100 of cost1 is the highest Z-Score
+c2[which.min(scale(c2 ,center=TRUE,scale=TRUE))] #: S92 of Cost2 is the lowest Z-Score
+
+```
