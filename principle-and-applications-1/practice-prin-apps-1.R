@@ -1,2 +1,13 @@
-x <- matrix(2:6, nrow = 5, byrow = FALSE)
-print(x)
+library(datasets)
+data <- quakes
+data
+
+str(data)
+summary(data) #summary gives min, mean, median, max
+didst <- table(data$mag)
+barplot3d(dist)
+hist(data)
+
+library(e1071)
+skewness(quakes$mag)
+
