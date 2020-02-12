@@ -17,6 +17,8 @@ dim(kobe)
   
 ##  1.What does a streak length of 1 mean, i.e. how many hits and misses are in a streak of 1? What about a streak length of 0?
   
+     Solution: 1 H and followed by miss in a streak length of 1 mean. 0 H in a streak length of 0.
+  
 ##  The custom function  calc_streak , which was loaded in with the data, may be used to calculate the lengths of all shooting streaks and then look at the distribution.
 
   kobe_streak <- calc_streak(kobe$basket)
