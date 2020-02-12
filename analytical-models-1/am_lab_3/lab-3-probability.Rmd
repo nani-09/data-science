@@ -1,0 +1,81 @@
+---
+title: "lab-3-probability"
+author: "Pradeep Paladugula"
+date: "2/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+download.file("http://www.openintro.org/stat/data/kobe.RData", destfile = "kobe.RData")
+
+load("kobe.RData")  # Kobe's shooting stats in few games
+head(kobe)
+tail(kobe)
+dim(kobe)
+
+kobe$basket[1:9] ## what is another way to get the same data??? 
+kobe[1:9,6]
+```
+
+1. What does a streak length of 1 mean, i.e. how many hits and misses are in a streak of 1? What about a streak length of 0?
+
+    Solution: 1 H and followed by miss in a streak length of 1 mean. 0 H in a streak length of 0.
+    
+```{r}
+kobe_streak <- calc_streak(kobe$basket)
+kobe_streak  
+barplot(table(kobe_streak))
+table(kobe$basket)/133
+```
+    
+2. Describe the distribution of Kobe's streak lengths from the 2009 NBA finals. What was his typical streak length? How long was his longest streak of baskets?
+
+    Solution: The Distribution of the Kobe's streak lengths are skewed to the right and also a unimodal distributions. the typical streak length is 0 and the longest streak of baskets is 4.
+
+    
+3. In the simulation of flipping the unfair coin 100 times, how many flips came up heads? Read more on the sample function in help.  ?sample()
+
+```{r}
+outcomes <- c("heads", "tails")
+sim_unfair_coin <- sample(outcomes, size = 100, replace = TRUE, prob = c(0.2, 0.8))
+sim_unfair_coin
+  table(sim_unfair_coin)
+```
+
+4. What change needs to be made to the  sample  function so that it reflects a shooting percentage of 45%? Make this adjustment, then run a simulation to sample 133 shots. Assign the output of this simulation to a new object called  sim_basket.
+
+```{r}
+outcomes <- c("H", "M")
+sim_basket <- sample(outcomes, size = 133, replace = TRUE, prob = c(.45, 0.55))
+sim_basket
+table(sim_basket)
+```
+    
+5.Describe the distribution of streak lengths. What is the typical streak length for this simulated independent shooter with a 45% shooting percentage? How long is the player's longest streak of baskets in 133 shots?
+
+```{r}
+calc_streak(sim_basket)
+barplot(table(calc_streak(sim_basket)))
+```
+    
+    Solution: 
+    typical streak length for this simulated independent shooter with a 45% shooting percentage: 0
+    longest streak of baskets in 133 shots: 6
+    
+6. If you were to run the simulation of the independent shooter a second time, how would you expect its streak distribution to compare to the distribution from the question above? Exactly the same? Somewhat similar? ?Totally different Explain your reasoning.(SEEDING THE SIMULATION????)
+
+    Solution: It is "Somewhat similar" when the simulation shooter ran for a second time.
+    
+7. How does Kobe Bryant's distribution of streak lengths compare to the distribution of streak lengths for the simulated shooter? Using this comparison, do you have evidence that the hot hand model fits Kobe's shooting patterns? Explain
+
+```{r}
+barplot(table(kobe_streak))
+```
+
+    #Resourse: https://www.khanacademy.org/math/ap-statistics/quantitative-data-ap/describing-comparing-distributions/v/classifying-distributions
+    
+    Solution: Distribution of streak lengths of both Kobe Bryant's and Simulated shooter are somewhat similar, which are skewed right. 
