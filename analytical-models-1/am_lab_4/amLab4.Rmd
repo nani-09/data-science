@@ -10,4 +10,78 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## R Markdown
+```{r}
+download.file("http://www.openintro.org/stat/data/bdims.RData", destfile = "bdims.RData")
+load("bdims.RData")
+head(bdims)
+```
+```{r, male and female dimensions}
+#Since males and females tend to have different body dimensions, it will be useful to create two additional data sets: 
+#one with only men and another with only women.``
+mdims <- subset(bdims, sex == 1)
+fdims <- subset(bdims, sex == 0)
+```
+
+.Now let's consider some of the other variables in the body dimensions data set.
+ Using the figures at the end of the exercises, match the histogram to its normal probability plot. 
+ All of the variables have been standardized (first subtract the mean, then divide by the 
+ standard deviation), so the units won't be of any help.
+ If you are uncertain based on these figures, generate the plots in R to check. (B,C,D)
+
+a. The histogram for female biiliac (pelvic) diameter ( bii.di ) belongs to normal probability plot letter __B__.
+
+b. The histogram for female elbow diameter ( elb.di ) belongs to normal probability plot letter __C__.
+
+c. The histogram for general age ( age ) belongs to normal probability plot letter __D__.
+
+d. The histogram for female chest depth ( che.de ) belongs to normal probability plot letter __A__.
+
+.Note that normal probability plots C and D have a slight stepwise pattern.
+Why do you think this is the case?
+
+    Solution: Probably data might be predictive data (choose randomly) which are picked randomly may cause the graph to get the stepwise pattern.
+
+.As you can see, normal probability plots can be used both to assess normality and visualize skewness.
+Make a normal probability plot for female knee diameter ( kne.di ).
+Based on this normal probability plot, is this variable left skewed, symmetric, or right skewed?
+Use a histogram to confirm your findings.
+
+    Solution: Form the denity distribution plot and normal distribution plot, it is clear that the varibale is right skewed. 
+
+```{r, Probability for  feamale knee diameter}
+fkneedim <- fdims$kne.di
+meanfknee <- mean(fkneedim)
+sdfknee <- sd(fkneedim)
+hist(fkneedim, probability = TRUE)
+x <- 14:26
+y <- dnorm(x = x, mean = meanfknee, sd = sdfknee)
+lines(x = x, y = y, col = 'blue')
+```
+
+```{r, femal knee diameter}
+qqnorm(fdims$kne.di)
+qqline(fdims$kne.di)
+```
+
+Normal Probablity Plots:
+
+```{r, B}
+qqnorm(fdims$bii.di)
+qqline(fdims$bii.di)
+```
+
+```{r, C}
+qqnorm(fdims$elb.di)
+qqline(fdims$elb.di)
+```
+
+```{r, D}
+qqnorm(fdims$age)
+qqline(fdims$age)
+```
+```{r, A}
+qqnorm(fdims$che.de)
+qqline(fdims$che.de)
+```
+
 

@@ -23,7 +23,8 @@ fdims <- subset(bdims, sex == 0)
 
 # 1.Make a histogram of men's heights and a histogram of women's heights. 
 # How would you compare the various aspects of the two distributions?
-
+hist(mdims$hgt)
+hist(fdims$hgt)
 
 #The normal distribution
 # In your description of the distributions, did you use words like bell-shaped or normal?

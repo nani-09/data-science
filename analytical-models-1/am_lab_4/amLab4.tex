@@ -1,0 +1,259 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={am\_lab\_4},
+            pdfauthor={Pradeep Paladugula},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{am\_lab\_4}
+\author{Pradeep Paladugula}
+\date{2/11/2020}
+
+\begin{document}
+\maketitle
+
+\hypertarget{r-markdown}{%
+\subsection{R Markdown}\label{r-markdown}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{download.file}\NormalTok{(}\StringTok{"http://www.openintro.org/stat/data/bdims.RData"}\NormalTok{, }\DataTypeTok{destfile =} \StringTok{"bdims.RData"}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\StringTok{"bdims.RData"}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(bdims)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   bia.di bii.di bit.di che.de che.di elb.di wri.di kne.di ank.di sho.gi che.gi
+## 1   42.9   26.0   31.5   17.7   28.0   13.1   10.4   18.8   14.1  106.2   89.5
+## 2   43.7   28.5   33.5   16.9   30.8   14.0   11.8   20.6   15.1  110.5   97.0
+## 3   40.1   28.2   33.3   20.9   31.7   13.9   10.9   19.7   14.1  115.1   97.5
+## 4   44.3   29.9   34.0   18.4   28.2   13.9   11.2   20.9   15.0  104.5   97.0
+## 5   42.5   29.9   34.0   21.5   29.4   15.2   11.6   20.7   14.9  107.5   97.5
+## 6   43.3   27.0   31.5   19.6   31.3   14.0   11.5   18.8   13.9  119.8   99.9
+##   wai.gi nav.gi hip.gi thi.gi bic.gi for.gi kne.gi cal.gi ank.gi wri.gi age
+## 1   71.5   74.5   93.5   51.5   32.5   26.0   34.5   36.5   23.5   16.5  21
+## 2   79.0   86.5   94.8   51.5   34.4   28.0   36.5   37.5   24.5   17.0  23
+## 3   83.2   82.9   95.0   57.3   33.4   28.8   37.0   37.3   21.9   16.9  28
+## 4   77.8   78.8   94.0   53.0   31.0   26.2   37.0   34.8   23.0   16.6  23
+## 5   80.0   82.5   98.5   55.4   32.0   28.4   37.7   38.6   24.4   18.0  22
+## 6   82.5   80.1   95.3   57.5   33.0   28.0   36.6   36.1   23.5   16.9  21
+##    wgt   hgt sex
+## 1 65.6 174.0   1
+## 2 71.8 175.3   1
+## 3 80.7 193.5   1
+## 4 72.6 186.5   1
+## 5 78.8 187.2   1
+## 6 74.8 181.5   1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Since males and females tend to have different body dimensions, it will be useful to create two additional data sets: }
+\CommentTok{#one with only men and another with only women.``}
+\NormalTok{mdims <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(bdims, sex }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{fdims <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(bdims, sex }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+.Now let's consider some of the other variables in the body dimensions
+data set. Using the figures at the end of the exercises, match the
+histogram to its normal probability plot. All of the variables have been
+standardized (first subtract the mean, then divide by the standard
+deviation), so the units won't be of any help. If you are uncertain
+based on these figures, generate the plots in R to check. (B,C,D)
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\item
+  The histogram for female biiliac (pelvic) diameter ( bii.di ) belongs
+  to normal probability plot letter \textbf{B}.
+\item
+  The histogram for female elbow diameter ( elb.di ) belongs to normal
+  probability plot letter \textbf{C}.
+\item
+  The histogram for general age ( age ) belongs to normal probability
+  plot letter \textbf{D}.
+\item
+  The histogram for female chest depth ( che.de ) belongs to normal
+  probability plot letter \textbf{A}.
+\end{enumerate}
+
+.Note that normal probability plots C and D have a slight stepwise
+pattern. Why do you think this is the case?
+
+\begin{verbatim}
+Solution: Probably data might be predictive data (choose randomly) which are picked randomly may cause the graph to get the stepwise pattern.
+\end{verbatim}
+
+.As you can see, normal probability plots can be used both to assess
+normality and visualize skewness. Make a normal probability plot for
+female knee diameter ( kne.di ). Based on this normal probability plot,
+is this variable left skewed, symmetric, or right skewed? Use a
+histogram to confirm your findings.
+
+\begin{verbatim}
+Solution: Form the denity distribution plot and normal distribution plot, it is clear that the varibale is right skewed. 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fkneedim <-}\StringTok{ }\NormalTok{fdims}\OperatorTok{$}\NormalTok{kne.di}
+\NormalTok{meanfknee <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(fkneedim)}
+\NormalTok{sdfknee <-}\StringTok{ }\KeywordTok{sd}\NormalTok{(fkneedim)}
+\KeywordTok{hist}\NormalTok{(fkneedim, }\DataTypeTok{probability =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{x <-}\StringTok{ }\DecValTok{14}\OperatorTok{:}\DecValTok{26}
+\NormalTok{y <-}\StringTok{ }\KeywordTok{dnorm}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x, }\DataTypeTok{mean =}\NormalTok{ meanfknee, }\DataTypeTok{sd =}\NormalTok{ sdfknee)}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x, }\DataTypeTok{y =}\NormalTok{ y, }\DataTypeTok{col =} \StringTok{'blue'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{amLab4_files/figure-latex/Probability for feamale knee diameter-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{kne.di)}
+\KeywordTok{qqline}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{kne.di)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{amLab4_files/figure-latex/femal knee diameter-1.pdf}
+
+Normal Probablity Plots:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{bii.di)}
+\KeywordTok{qqline}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{bii.di)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{amLab4_files/figure-latex/B-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{elb.di)}
+\KeywordTok{qqline}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{elb.di)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{amLab4_files/figure-latex/C-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{age)}
+\KeywordTok{qqline}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{age)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{amLab4_files/figure-latex/D-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{che.de)}
+\KeywordTok{qqline}\NormalTok{(fdims}\OperatorTok{$}\NormalTok{che.de)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{amLab4_files/figure-latex/A-1.pdf}
+
+\end{document}
