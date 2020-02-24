@@ -1,0 +1,62 @@
+---
+title: "mid-term-q21"
+author: "Pradeep Paladugula"
+date: "2/23/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, mtcars data}
+library('ggplot2')
+library('e1071')
+library('datasets')
+data(mtcars)
+mtcars
+head(mtcars)
+```
+
+
+    The Null Hypothesis is the number of miles per gallon of the cars does not depend on the number of cylinders, hors power and gear(transmission type)
+    
+    The Alternative Hypotheses is the number of miles per gallon of the cars has the direct correlation with the number of cylinders used, the vehiclehorse power and gear(transmission type)
+    
+    Dependant Variable: Miles per Gallon
+    Independent Variables: Cylinders, Horse Power, Type of Gear
+    
+    Apart from the dependant and Independant variables, the rest of the data is not considered in this research work. 
+    
+    From looking the data, I noticed any missing data, NA's and error is the data. the data seems to be pretty good.
+    
+```{r, Mileage of automatic transmission cars}
+mtcars$am = factor(mtcars$am, levels = c(0,1), labels = c("automatic", "manual"))
+
+hist(mtcars[mtcars$am == "automatic",]$mpg, main = "Mileage of automatic transmission cars", xlab = "Miles", ylab = "Frequency")
+```
+
+```{r, Mileage of manual transmission cars}
+hist(mtcars[mtcars$am == "manual",]$mpg, main = "Mileage of automatic transmission cars", xlab = "Miles", ylab = "Frequency")
+```
+
+```{r, summary of manual and automatic transmission cars}
+summary(mtcars[mtcars$am == "automatic",]$mpg)
+
+summary(mtcars[mtcars$am == "manual",]$mpg)
+```
+
+```{r}
+ggplot(mtcars, aes(hp, mpg)) + geom_point()+geom_smooth(method = "lm", se = FALSE) + ggtitle("Relation between mpg and HP") + xlab("hp") + ylab("mpg")
+```
+
+```{r}
+ggplot(mtcars, aes(am, mpg)) + geom_point()+geom_smooth(method = "lm", se = FALSE) + ggtitle("Relation between mpg and transmission type") + xlab("am") + ylab("mpg")
+```
+
+```{r}
+
+ggplot(mtcars, aes(cyl, mpg)) + geom_point()+geom_smooth(method = "lm", se = FALSE) + ggtitle("Relation between mpg and cyl") + xlab("cyl") + ylab("mpg")
+```
+    
+    

@@ -1,0 +1,54 @@
+---
+title: "mid-term-q26"
+author: "Pradeep Paladugula"
+date: "2/23/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, data}
+library('ggplot2')
+library('e1071')
+data <- read.csv('iris_exams.csv', header = TRUE)
+diff_species = sapply(data, levels)$Species
+diff_species
+```
+
+```{r, sepal length for Setosa}
+#histSetosa <- ggplot(data, aes(data[data$Species=="setosa",]$Sepal.Length))
+#histSetosa + geom_histogram(binwidth = 0.05, color = 'pink') + labs(xlab = 'Sepal Length', ylab = 'Frequency', title = 'Sepal Length of setosa')
+hist(data[data$Species=="setosa",]$Sepal.Length, main = 'Sepal Length of setosa', xlab = 'Sepal Length', ylab = 'Frequency', col = 'blue', border = 'black', breaks = 30)
+```
+
+```{r, histogram of versicolor}
+hist(data[data$Species=="versicolor",]$Sepal.Length, main = 'Sepal Length of versicolor', xlab = 'Sepal Length', ylab = 'Frequency', col = 'red', border = 'black', breaks = 30)
+```
+
+```{r, histogram of virginica}
+hist(data[data$Species=="virginica",]$Sepal.Length, main = 'Sepal Length of virginica', xlab = 'Sepal Length', ylab = 'Frequency', col = 'green', border = 'black', breaks = 30)
+```
+
+```{r, statistics of flower specices}
+setosalength <- data[data$Species=="setosa",]$Sepal.Length
+
+Versicolorlength <- data[data$Species=="versicolor",]$Sepal.Length
+
+Virginicalength <- data[data$Species=="virginica",]$Sepal.Length
+
+Setosa = c(mean = mean(setosalength), sd = sd(setosalength), quartile = quantile(setosalength), min=min(setosalength), max = max(setosalength), skewness = skewness(setosalength), kurtosis = kurtosis(setosalength))
+
+Versicolor = c(mean = mean(Versicolorlength), sd = sd(Versicolorlength), quartile = quantile(Versicolorlength), min=min(Versicolorlength), max = max(Versicolorlength), skewness = skewness(Versicolorlength), kurtosis = kurtosis(Versicolorlength))
+
+Verginica = c(mean = mean(Virginicalength), sd = sd(Virginicalength), quartile = quantile(Virginicalength), min=min(Virginicalength), max = max(Virginicalength), skewness = skewness(Virginicalength), kurtosis = kurtosis(Virginicalength))
+
+specices_stat = data.frame(Setosa, Versicolor, Verginica)
+specices_stat
+```
+
+
+    Interpretation: The Virginica has the highest Sepal Length among three flower species.
+    setosa has the less standard devisation, low skewness among the spcises, and from the histogrma graph its seems like having reatively normal distribution. Versicolor seems to have a low negative skewness. Virginica has the highest standard deviation, hight skewness to the right, positive kurtosis and also has the longest sepal length than other two. From the Virginica histogram Graph itseems like has the outliers.

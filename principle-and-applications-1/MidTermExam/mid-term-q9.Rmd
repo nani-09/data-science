@@ -1,0 +1,63 @@
+---
+title: "mid-term-q9"
+author: "Pradeep Paladugula"
+date: "2/23/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, data}
+data <- read.csv('iris_exams.csv')
+str(data)
+```
+
+```{r, data preview}
+head(data)
+tail(data)
+sepalLength <- data$Sepal.Length
+sepalWidth <- data$Sepal.Width
+petalLength <- data$Petal.Length
+petalWidth <- data$Petal.Width
+table(sepalLength)
+table(sepalWidth)
+table(petalLength)
+table(petalWidth)
+```
+
+```{r, histogram of sepalLength}
+library('ggplot2')
+library('e1071')
+histSepalLength <- ggplot(data, aes(Sepal.Length))
+histSepalLength + geom_histogram(binwidth = 0.05, color = 'pink') + labs(xlab = 'Sepal Length', ylab = 'Frequency')
+```
+
+```{r, histogram of sepalWidth}
+histSepalWidth <- ggplot(data, aes(Sepal.Width))
+histSepalWidth + geom_histogram(binwidth = 0.05, color = 'blue') + labs(xlab = 'Sepal Width', ylab = 'Frequency')
+```
+
+```{r, histogram of petalLength}
+histPetalLength <- ggplot(data, aes(Petal.Length))
+histPetalLength + geom_histogram(binwidth = 0.05, color = 'green') + labs(xlab = 'Petal Length', ylab = 'Frequency')
+```
+
+```{r, histogram of petalWidth}
+histPetalWidth <- ggplot(data, aes(Petal.Width))
+histPetalWidth + geom_histogram(binwidth = 0.05, color = 'yellow') + labs(xlab = 'Petal Width', ylab = 'Frequency')
+```
+
+```{r, statics Summary}
+sepallength = c(mean = mean(sepalLength), sd = sd(sepalLength), quartile = quantile(sepalLength), min=min(sepalLength), max = max(sepalLength), skewness = skewness(sepalLength), kurtosis = kurtosis(sepalLength))
+sepalwidth = c(mean = mean(sepalWidth), sd = sd(sepalWidth), quartile = quantile(sepalWidth), min=min(sepalWidth), max = max(sepalWidth), skewness = skewness(sepalWidth), kurtosis = kurtosis(sepalWidth))
+petallength = c(mean = mean(petalLength), sd = sd(petalLength), quartile = quantile(petalLength), min=min(petalLength), max = max(petalLength), skewness = skewness(petalLength), kurtosis = kurtosis(petalLength))
+petalwidth = c(mean = mean(petalWidth), sd = sd(petalWidth), quartile = quantile(petalWidth), min=min(petalWidth), max = max(petalWidth), skewness = skewness(petalWidth), kurtosis = kurtosis(petalWidth))
+summary_stat = data.frame(sepallength, sepalwidth, petallength, petalwidth)
+summary_stat
+```
+
+
+    Interpretation:
+    When Sepal Length of all species considered it seems to have low skewness to the right from the statistics and histgram graph. Sepal Width of specises considered together it has the postive medium skewness, low standars deviation and also low positive kurtosis, which dirives that the data falls on the middle range. The Petal Length of all specis considered together, it has the negative skweness and data appears to have large peaks on the left which can be seen on the graph, whihc leads to high negative kurtosis. The Petal WIdth of all specices consisdered together having any neagative skewness and also from the graph it is seen that data has high negative values in the left whihc again leads to high negative kurtosis.
