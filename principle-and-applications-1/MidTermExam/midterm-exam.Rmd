@@ -10,5 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-data <- read.csv()
+data <- read.csv('iris_exams.csv')
+data
+```
+
+
+```{r, q9: structure of data}
+str(data)
 ```
