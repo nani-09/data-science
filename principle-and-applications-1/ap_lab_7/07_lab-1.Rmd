@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Dataset:
 ```{r, dataset}
 data <- read.csv('07_data.csv')
+data
 ```
 
     -	Gender of the participant surveyed on these topics

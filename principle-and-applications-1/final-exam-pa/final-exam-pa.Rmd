@@ -1,0 +1,96 @@
+---
+title: "pa-final-exam"
+author: "Pradeep Paladugula"
+date: "4/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, iris data}
+irisdata <- read.csv('iris_exams.csv')
+summary(irisdata)
+```
+
+QUESTION 1:
+```{r miising values}
+apply(irisdata,2, function(x){sum(is.na(x))/length(x)*100})
+```
+```{r outliers}
+mahal <- mahalanobis(irisdata[, c(-1,-2)], colMeans(irisdata[,c(-1,-2)]), cov(irisdata[,c(-1,-2)]))
+cutmahal <- qchisq(1-.001, ncol(data[,c(-1,-2)]))
+cutmahal
+badmahal = as.numeric(mahal > cutmahal)
+table(badmahal)
+```
+
+```{r linearity}
+library(lmtest)
+random <- rchisq(nrow(irisdata), 3:6)
+fake <- lm(random ~ ., data = irisdata[,3:6])
+standardized <- rstudent(fake)
+fitted <- scale(fake$fitted.values)
+qqnorm(standardized)
+abline(0,1)
+
+#noout = subset(data, totalout < 2)
+#screen1 = lm(OCB ~ cognitive + affective + years + type_work, data = noout) 
+#standardized = rstudent(screen1) 
+#fitted = scale(screen1$fitted.values)
+#summary(screen1, correlation = T)
+```
+```{r normality}
+hist(standardized)
+```
+```{r, homogeneity/homoscedasity}
+{plot(fitted, standardized)
+abline(0,0)
+abline(v = 0)}
+```
+
+```{r}
+cor(irisdata[,c(3:6)], use="pairwise.complete.obs", method = "spearman")
+cov(irisdata[,c(3:6)], use="everything", method = "spearman")
+var(irisdata[,c(3:6)], na.rm = TRUE)
+```
+
+QUESTION 2:
+```{r, linear regression}
+spec <- irisdata$Species
+spec
+sl <- irisdata$Sepal.Length
+sw <- irisdata$Sepal.Width
+pl <- irisdata$Petal.Length
+pw <- irisdata$Petal.Width
+LM <- lm(sl ~ sw + pl + pw + spec, data = irisdata)
+LM
+```
+
+
+
+QUESTION 3:
+```{r, anova model}
+group1 <- irisdata[,c(3:6)]
+group2<- irisdata$Species
+combind_groups <- data.frame(cbind(group1,group2))
+summary(combind_groups)
+stacked_groups <- stack(combind_groups)
+stacked_groups
+anova_results <- aov(values ~ ind, data = stacked_groups)
+summary(anova_results)
+```
+
+QUESTION 4:
+```{r, t-test}
+x <- irisdata[irisdata$Species == "setosa",]$Sepal.Length
+y <- irisdata[irisdata$Species == "versicolor",]$Sepal.Length
+t.test( x, y, 
+    data = irisdata,
+    var.equal = FALSE,
+    paired = FALSE,
+   alternative = "two.sided"
+)
+```
+the p-value is less than 0.5 and value of means for both x and y variables are almost same

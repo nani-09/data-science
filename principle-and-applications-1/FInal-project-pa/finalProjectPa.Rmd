@@ -1,0 +1,206 @@
+---
+title: "finalProjectPa"
+author: "Pradeep Paladugula"
+date: "4/25/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data <- read.csv('wine.csv')
+data <- na.omit(data)
+summary(data)
+```
+
+```{r}
+LR <- lm(Alchohol ~ Malic_acid + Ash + Alcalinity_of_ash + Maganesium + Total_phenols + Flavanoids + Nonflavanoid_phenols + Proanthocyanins + Color_intensity + Hue + OD280_OD315 + Proline + wine_type, data = data)
+summary(LR)
+```
+
+```{r}
+k = 13
+leverage = hatvalues(LR) 
+cutoffLeverage = (2*k+2)/nrow(data) 
+cutoffLeverage
+badLev = leverage > cutoffLeverage
+badLev
+table(badLev)
+
+cooks = cooks.distance(LR) 
+cooks
+cutoffCooks = 4 / (nrow(data) - k - 1) 
+cutoffCooks
+badcooks = cooks > cutoffCooks 
+table(badcooks)
+
+mahal <- mahalanobis(data[ , -1], 
+                    colMeans(data[ , -1]),
+                    cov(data[ , -1])) 
+cutmahal = qchisq(1-.001, ncol(data[ , -5])) 
+cutmahal
+badmahal = mahal > cutmahal 
+table(badmahal)
+
+totalout = badlev + badcooks + badmahal
+totalout
+table(totalout)
+```
+
+```{r, additivity}
+noout = subset(data, totalout < 3)
+LR1 <- lm(Alchohol ~ Malic_acid + Ash + Alcalinity_of_ash + Maganesium + Total_phenols + Flavanoids + Nonflavanoid_phenols + Proanthocyanins + Color_intensity + Hue + OD280_OD315 + Proline + wine_type, data = noout)
+standardized = rstudent(LR1) 
+fitted = scale(LR1$fitted.values)
+summary(LR1, correlation = T)
+```
+
+```{r, linearity}
+qqnorm(standardized) 
+abline(0,1)
+```
+
+```{r, normality}
+h<-hist(standardized, breaks=15, col="yellow", xlab="Components",
+   main="Histogram with Normal Curve")
+xfit<-seq(min(standardized),max(standardized),length=40)
+yfit<-dnorm(xfit,mean=mean(standardized),sd=sd(standardized))
+yfit <- yfit*diff(h$mids[1:2])*length(standardized)
+lines(xfit, yfit, col="blue", lwd=2)
+```
+
+```{r, homogenity and homoscedasity}
+plot(fitted, standardized) 
+abline(0,0, v = 0) 
+```
+
+```{r, dist plot}
+hist(data$Alchohol, breaks = 15, density = TRUE)
+```
+
+```{r}
+x <- data$Alchohol
+h<-hist(x, breaks=15, col="yellow", xlab="Alchohol",
+   main="Histogram with Normal Curve")
+xfit<-seq(min(x),max(x),length=40)
+yfit<-dnorm(xfit,mean=mean(x),sd=sd(x))
+yfit <- yfit*diff(h$mids[1:2])*length(x)
+lines(xfit, yfit, col="blue", lwd=2)
+
+plot(x, main="Kernel Density of Alchohol Content")
+polygon(x, col="red", border="blue")
+```
+
+```{r}
+library('ggplot2')
+data <- read.csv('wine.csv')
+data <- na.omit(data)
+data$wine_type <- factor(data$wine_type, levels = c(1,2,3), labels = c("Pinot Noir", "Cabernet", "Merlot"))
+
+ggplot(data, aes(data$Alchohol, fill=data$wine_type)) +
+    geom_histogram(binwidth=0.5, alpha= 0.5, position="stack") + geom_density() 
+ggplot(data, aes(x = data$Alchohol, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Alchohol, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Malic_acid, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Malic_acid, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Ash, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Ash, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Alcalinity_of_ash, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Alcalinity_of_ash, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Maganesium, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Maganesium, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Total_phenols, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Total_phenols, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Flavanoids, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Flavanoids, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Nonflavanoid_phenols, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Nonflavanoid_phenols, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Proanthocyanins, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Proanthocyanins, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Color_intensity, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Color_intensity, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Hue, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Hue, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$OD280_OD315, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$OD280_OD315, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+
+
+ggplot(data, aes(x = data$Proline, fill = data$wine_type)) +
+         geom_density(alpha = .3)
+ggplot(data, aes(x = data$wine_type, y = data$Proline, fill = data$wine_type)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun.y=mean, geom="point", shape=5, size=4)
+```
+
+```{r, correlation}
+library(corrplot)
+library(RColorBrewer)
+data <- read.csv('wine.csv')
+data <- na.omit(data)
+M <-cor(data)
+corrplot(M, type="upper", order="hclust",
+         col=brewer.pal(n=8, name="RdYlBu")) 
+ heatmap(M) 
+ symnum(M)
+
+
+#The distribution of each variable is shown on the diagonal.
+#On the bottom of the diagonal : the bivariate scatter plots with a fitted line are displayed
+#On the top of the diagonal : the value of the correlation plus the significance level as stars
+#Each significance level is associated to a symbol : p-values(0, 0.001, 0.01, 0.05, 0.1, 1) <=> symbols(“***”, “**”, “*”, “.”, " “)
+library("PerformanceAnalytics")
+my_data <- data[, c(2:14)]
+chart.Correlation(my_data, histogram=TRUE, pch=19)
+```
+
+```{r, anova}
+anova_results <- aov(LR1, data = data)
+summary(anova_results)
+```
