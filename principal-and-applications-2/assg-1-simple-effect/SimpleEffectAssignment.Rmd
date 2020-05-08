@@ -1,0 +1,103 @@
+---
+title: "Simple Effect Assignment"
+author: "Pradeep Paladugula"
+date: "5/4/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Q1)
+  HO: their is no difference in the cholestoral from using two brands of margarine
+  H1: Thier is a significant different in the Cholestral between using two differnet brands of cholestral
+  Solution: 
+    1) From the densitya and box plots it is clearly see that thier is a significant different between the Cholestoral between two different brnads of Margarine.
+    2) From t-test even though the p-value id less the 0.5 and thier is clear differnece in the means values, t value is greater than 3.
+
+```{r, CholestoralData}
+library('ggplot2')
+cData <- read.csv('CholestoralData.csv')
+summary(cData)
+t.test(cData$Before, cData$After, paried = TRUE, alternative = 'two.sided', var.equal = FALSE)
+t.test(cData$Before, cData$After, paried = TRUE, alternative = 'two.sided', var.equal = TRUE)
+ggplot(cData, aes(x = Before, fill = Margarine)) +
+         geom_density(alpha = .3)
+ggplot(cData, aes(x = Margarine, y = Before, fill = Margarine)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun=mean, geom="point", shape=5, size=4)
+ggplot(cData, aes(x = After, fill = Margarine)) +
+         geom_density(alpha = .3)
+ggplot(cData, aes(x = Margarine, y = After, fill = Margarine)) +
+         geom_boxplot() + coord_flip() + stat_summary(fun=mean, geom="point", shape=5, size=4)
+
+x <- log(cData$Before)
+ggplot(cData, aes(x = x, fill = Margarine)) +
+         geom_density(alpha = .3)
+
+y <- log(cData$After)
+ggplot(cData, aes(x = y, fill = Margarine)) +
+         geom_density(alpha = .3)
+
+```
+
+Q2)
+H0: Their is no difference in children help or doesn't help in cooking the food for the calories they consumed
+H1: Their is a significant difference in children help or doesn't help in cooking the food for the calories they consumed
+Solution:
+  1) From Leven`s Test: the p-value is 0.8716 which is great than 0.05 and significatly supports the null hypothesis.
+  2) From the independent t-test`s: I have conducted t-test twice for both clasical and Welch t-tests. I noticed that their is significant diference between the mean values of those whose help cooking and doesn't help in cooking. 
+
+```{r, kidsCaloris}
+library(lawstat)
+kcData <- read.csv('kidscalories.csv')
+levene.test(
+  kcData$calorieintake,
+  kcData$helpedinprep,
+  location = c("median", "mean", "trim.mean"),
+  trim.alpha = 0.25,
+  bootstrap = FALSE,
+  num.bootstrap = 1000,
+  kruskal.test = FALSE,
+  correction.method = c("none", "correction.factor", "zero.removal", "zero.correction")
+)
+t.test(calorieintake ~ helpedinprep, data = kcData, alternative = c("two.sided"), var.equal = FALSE)
+t.test(calorieintake ~ helpedinprep, data = kcData, alternative = c("two.sided"), var.equal = TRUE)
+tapply(kcData$calorieintake, kcData$helpedinprep, sd)
+```
+
+Q3)
+H0: Kids Priorities in Goals have not differed from the regions they lived in
+H1: Kids Priorities in Goals have significance difference from the regions they lived in
+Solution:
+I have conducted the ChiSquare statistics to investiagte the whether the ditribution of categorical variable differ from one another.
+  1) For rural reagion the p-value is 0.4677 whihc is greateer than the conventionally accepted significance level of 0.05 we fail to reject the null hypothesis.
+  2) For Suburban and Urban reagion the p-value is less than 0.001 whihc is far less than the conventionally accepted significance level of 0.05 we we reject the null hypothesis in favor of the alternative hypothesis. when we clarified the pearsons ChiSquare method for Urban and Suburban inclusively, when considered together both the regions are showing same interests in thier goals. 
+  3) When compared between rural and (Urban and Subarban), there is much differece seen between the goals of the kids.
+
+```{r, prioritiesData}
+library(reshape)
+pData <- read.csv('PrioritiesData.csv')
+
+modifiedPData <- melt(pData, id=c("Goal"))
+
+#levene.test(value ~ variable, modifiedPData, center = mean)
+
+chisq.test(pData$Rural)
+chisq.test(pData$Suburban)
+chisq.test(pData$Urban)
+
+chisq.test(pData[,3:4])
+
+```
+
+Q4)
+
+```{r, votingData}
+vData <- read.csv('VotingData.csv')
+#colnames <- c("VotedFor", "DRL", "RLD", "LDR")
+#rownames <- c("DEM", "REP", "LIB")
+#P <- matrix(vData[c(1:2)], nrow = 4, byrow = TRUE, dimnames = list(rownames, colnames))
+```
+
+
