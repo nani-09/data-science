@@ -1,0 +1,50 @@
+---
+title: "Question-13"
+author: "Pradeep Paladugula"
+date: "6/5/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+ExamData = read.csv('Exam1Q1.csv')
+adjdata = select(ExamData, Highschool, BS)
+summary(adjdata)
+sd(adjdata$Highschool)
+mean(adjdata$Highschool)
+sd(adjdata$BS)
+mean(adjdata$BS)
+
+#density plots
+plot(density(adjdata$Highschool))
+
+plot(density(adjdata$BS))
+
+#test for normality
+shapiro.test(adjdata$Highschool)
+shapiro.test(adjdata$BS)
+
+#test for skewness
+agostino.test(adjdata$Highschool)
+agostino.test(adjdata$BS)
+
+# test for equality of variances/homoscedasticity/homogeneity of variance)
+library(reshape2)
+library(moments)
+library(car)
+meltData <- melt(adjdata)
+
+leveneTest(value ~ variable, meltData)
+
+#t-test
+t.test(adjdata$Highschool, adjdata$BS, var.equal = TRUE)
+tapply(meltData$value, meltData$variable, mean )
+tapply(meltData$value, meltData$variable, sd )
+```
+
+    Conclusion:
+
+    I have conducted independent t-test comparing the earnings of those with a high school diploma (M = 39.51; SD = 2.489) to those with a bachelors of science (M = 50.7666; SD = 6). I noticed significant difference between the earnings of the two groups, t(76) = -10.81217, p = 2.2e-16 < 0.05. In whoel it supports the alternative hyp[othesis that it appears the level of schooling (high school vs a BSc) has a very high impact on earnings in the firm.

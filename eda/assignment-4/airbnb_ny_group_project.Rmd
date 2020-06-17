@@ -1,0 +1,46 @@
+---
+title: "Project_NY_Airbnb"
+author: "Pradeep Paladugula"
+date: "6/8/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# Loading the libraries
+library('dplyr')
+
+#Dataset
+airbnb_ny = read.csv('AB_NYC_2019.csv')
+head(airbnb_ny)
+```
+
+
+
+```{r pressure, echo=FALSE}
+# Checking the datatypes, all variables seems to have appropriate data types
+str(airbnb_ny)
+```
+
+```{r}
+# Checking summary
+summary(airbnb_ny)
+```
+
+```{r}
+# Replacing the N/A's with 0s
+clean_airbnb_ny <- replace(airbnb_ny,is.na(airbnb_ny),0)
+
+# Checking summary again
+summary(clean_airbnb_ny)
+```
+
+```{r}
+# Checking whether any Null values / bad data in the dataframe after cleansing
+sapply(clean_airbnb_ny, function(x)all(any(is.na(x))))
+```
+

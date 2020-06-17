@@ -1,0 +1,125 @@
+---
+title: "question-14"
+author: "Pradeep Paladugula"
+date: "6/5/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+    variables from the dataset:
+    attended driving school : Attended and not attended(categorical variable)
+    dayornight: categorical variable
+    dayoftesting: categorical variable
+    errorsmade: numeric variable
+
+```{r}
+library(reshape2)
+library(moments)
+library(car)
+driveData = read.csv('Exam1Q2.csv')
+driveData$dayornight <- factor(driveData$dayornight, level = c(1, 2), labels = c('day', 'night'))
+driveData$dayoftesting <- factor(driveData$dayoftesting, level = c(1, 2), labels = c('Saturday', 'Sunday'))
+driveData$attendeddrivingschool <- factor(driveData$attendeddrivingschool, level = c(1, 2), labels = c('NotAttended', 'Attended'))
+driveData
+
+summary(driveData)
+plot(density(driveData$errorsmade))
+
+qplot(errorsmade,data = driveData, geom="density", fill= attendeddrivingschool, alpha=I(.5), 
+  main="Density plot of errosmade by drivers between attended/not attended driving school drivers", xlab="errors made", 
+  ylab="Density", xlim = c(0,0.8))
+
+qplot(errorsmade,data = driveData, geom="density", fill= dayornight, alpha=I(.5), 
+  main="Density plot of errosmade by drivers between attended/not attended driving school drivers", xlab="errors made", 
+  ylab="Density", xlim = c(0,0.8))
+
+qplot(errorsmade,data = driveData, geom="density", fill= dayoftesting, alpha=I(.5), 
+  main="Density plot of errosmade by drivers between attended/not attended driving school drivers", xlab="errors made", 
+  ylab="Density", xlim = c(0,0.8))
+```
+
+```{r, reducing skewness}
+# clearing positive skewness using logorithmic transformation method
+driveData$em = log(driveData$errorsmade + 1)
+summary(driveData)
+
+#checking density plots to make sure the positive skewness is some what reduced.
+qplot(em,data = driveData, geom="density", fill= attendeddrivingschool, alpha=I(.5), 
+  main="Density plot of errosmade by drivers between attended/not attended driving school drivers", xlab="errors made", 
+  ylab="Density", xlim = c(-0.1,0.6))
+
+qplot(em,data = driveData, geom="density", fill= dayornight, alpha=I(.5), 
+  main="Density plot of errosmade by drivers between attended/not attended driving school drivers", xlab="errors made", 
+  ylab="Density", xlim = c(0,0.8))
+
+qplot(em, data = driveData, geom="density", fill= dayoftesting, alpha=I(.5), 
+  main="Density plot of errosmade by drivers between attended/not attended driving school drivers", xlab="errors made", 
+  ylab="Density", xlim = c(0,0.8))
+```
+
+```{r, test fo skewness}
+library(moments)
+agostino.test(driveData$errorsmade)
+agostino.test(driveData$em)
+```
+
+```{r, bartlettt test for homginity of variance}
+#bartlettt test of invidual variable
+bartlett.test(driveData$em, driveData$attendeddrivingschool)
+bartlett.test(driveData$em, driveData$dayornight)
+bartlett.test(driveData$em, driveData$dayoftesting)
+
+#bartlettt test between driving school attended and days of testing
+bartlett.test(driveData$em, driveData$attendeddrivingschool:driveData$dayoftesting)
+
+#bartlettt test between driving school attended and day/night
+bartlett.test(driveData$em, driveData$attendeddrivingschool:driveData$dayornight)
+
+
+#bartlettt test between dayornight and daysof testing 
+bartlett.test(driveData$em, driveData$dayornight:driveData$dayoftesting)
+
+#bartlettt test with all conditions included
+bartlett.test(driveData$em, driveData$attendeddrivingschool:driveData$dayornight:driveData$dayoftesting)
+```
+
+```{r, anova of the variables}
+anovaVar = aov(em ~ attendeddrivingschool + dayornight + dayoftesting , data = driveData)
+summary(anovaVar)
+```
+
+```{r, anova interaction between the variables}
+anovaInteraction = aov(em ~ attendeddrivingschool * dayornight * dayoftesting , data = driveData)
+summary(anovaInteraction)
+```
+
+
+```{r plot aov}
+plot(anovaInteraction)
+shapiro.test(anovaInteraction$residuals)
+```
+
+```{r, post hoc test}
+TukeyHSD(anovaInteraction)
+TukeyHSD(anovaInteraction, "attendeddrivingschool")
+TukeyHSD(anovaInteraction, "dayornight")
+```
+
+
+    Conclusion:
+
+      As I noticed the data had skewness by running density polt, I have reduced the skewness using teh logrithemic tranformation method. and tested using the agostino test. before the logrithemic tranformation apllioed on the data (skew = 0.94754, p-value = 0.00754) and after teh logarithemic tranformation (skew = 0.72471, p-value = 0.03316). from teh bartlett test i have noticed the for attendeddrivingschool (p-value = 0.02348) and dayornight (p-value = 0.0386) observed the the p-value is less than the 0.05 which clearly supports the alternatives hypothesis and dayoftesting(p-value = 0.7456) which the p-value is greater thatn 0.05 and suports the null hypothesis. and from the anova test i have noticed that the dayof testing doesnt have any effect on the erros made by drivers F(1, 40) = 0.067 which is way less and p-value = 0.79672 > 0.05. The drivers conditions attendeddrivingschool  and dayornight has the huge impact on the errors commited f(1,40) = (11.742, 20.715), p-value = (0.00143, 4.88e-05), the pvalue is <0.05 and f-value are higher. from teh below data of tuckey's test, I noticed that those who attend driving school makde less errors compared to those who attend teh driving, and also driving become harder to drivers during night adn  more errors are commited.
+      
+      $`attendeddrivingschool:dayornight`
+                                         diff         lwr         upr     p adj
+    Attended:day-NotAttended:day      -0.02708731 -0.09667040  0.04249579 0.7251769
+    NotAttended:night-NotAttended:day  0.11935976  0.04977666  0.18894285 0.0002392
+    Attended:night-NotAttended:day     0.02064755 -0.04893555  0.09023065 0.8561142
+    NotAttended:night-Attended:day     0.14644706  0.07686396  0.21603016 0.0000088
+    Attended:night-Attended:day        0.04773486 -0.02184824  0.11731795 0.2707021
+    Attended:night-NotAttended:night  -0.09871221 -0.16829530 -0.02912911 0.0026015
+    
+    

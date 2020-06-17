@@ -1,0 +1,21 @@
+---
+title: "eda-quiz-1"
+author: "Pradeep Paladugula"
+date: "6/16/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, data}
+data <- read.csv('College used for Quiz1-1.csv')
+data1 <- read.csv('College.csv')
+str(data)
+str(data1)
+summary(data1)
+vartypes(data)
+glimbs(data)
+glimpse(data)
+```

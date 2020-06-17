@@ -1,0 +1,68 @@
+---
+title: "Untitled"
+author: "Pradeep Paladugula"
+date: "5/19/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, data}
+library('xlsx')
+library('Quandl')
+#crimeData <- read.csv('crimedata.csv')
+houseData = read.csv('houses-1.csv')
+incomeData = read.csv('income-1.csv')
+expensiveHouseData = read.csv('houses-1.csv', sql="select * from  where hoses > 20000", ncol("\n"))
+mtcarsData = data(mtcars)
+musicData = read.table('music-1.txt')
+housexlsData = read.xlsx2('housesExcel-1.xlsx', 1)
+hdata = read.csv('heights.csv')
+crimeData = read.csv('crimedata.csv')
+#environmentalCars = mtcarsData[mtcarsData$mpg>20]
+#nonEnvironmentalcars = mtcarsData[mtcarsData$mpg<20]
+AAPLData = Quandl("WIKI/AAPL")
+AAPLData
+
+a = c(2,4,6,8)
+b = c("Joe", "Bob", "Jim", "Tom")
+c = c(T, F, F, T)
+d = factor(c("big", "small", "small", "big"))
+
+library('dplyr')
+df = data.frame(a,b,c,d)
+glimpse(df)
+
+df2 = data.frame(a,b,c,d, stringsAsFactors = F)
+glimpse(df2)
+
+x = c(1,2,NA,4)
+sum(x)
+sum(is.na(x))
+
+y = c(2,2,3,4)
+df = data.frame(x, y)
+df
+summary(df)
+
+colSums(na.omit(df))
+colSums(df, na.rm =T)
+df$x[is.na(df$x)] = mean(na.omit(df$x))
+df$x
+colSums(df)
+
+x = c(0.1,0.7,0.3,0.9)
+highLow = ifelse(x>0.5, "High", "Low")
+highLow
+
+crimeData
+```
+
+```{r, module 4}
+mod4Data <- read.csv('companies.csv')
+mod5avg <- read.csv('avgpm25.csv')
+mod5nyc <- read.csv('ny.csv')
+str(mod4Data)
+```

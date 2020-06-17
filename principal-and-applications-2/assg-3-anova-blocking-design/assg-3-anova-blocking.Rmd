@@ -1,0 +1,123 @@
+---
+title: "assg-3"
+author: "Pradeep Paladugula"
+date: "5/19/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+    Data:
+    Age: Categorical character variable (60-69, 70-79, >80 )
+    Condition: categorical character variable (task1, task2, task3)
+    Performance score: numerical variable
+
+
+```{r, data}
+library('xlsx')
+library('ggplot2')
+library(gplots)
+library(tidyr)
+library(dplyr)
+#labData = read.xlsx2('lab3.xlsx', 1)
+labData = read.csv('Lab3.csv')
+```
+1. What assumption must we test to include a variable as a blocking factor?
+
+Solution:
+  - H0: Their is no difference in the performance inbetween age group in any condition
+  - H1: thier is significant difference in the performacne between age group under three different condiontions 
+  - performnace density plots of three different age groups and also performance density plot when considered all the the groups together tp check the normality
+  - skewness and also kurtosis to check greater extremity of deviations or outliers
+      - higher the value of leads to greater extremity and the value also depend on p-value
+  - Analysis of variance (ANOVA) and eqality of variance test between the age groups.
+  
+
+```{r}
+library('ggplot2')
+perfData = labData$Performance_score
+qplot(Performance_score, data=labData, geom="density", fill= Age, alpha=I(.5), 
+   main="Density plot of performance of skillset between different age groups", xlab="performance score of skillset", 
+   ylab="Density", xlim = c(5,50))
+plot(density(x = labData$Performance_score, na.rm = TRUE))
+```
+
+
+2. Recognize the IV, DV, block and create a table for the following research statement.
+
+     “A company is planning to investigate the motor skills or elderly population. The company separates the target population into three age categories: 60 – 69, 70 – 79, and above 80 then randomly assign the participants in the study to one of the three task conditions. After individuals have completed the task, their performance will be compared.”
+
+```{r}
+labData = read.csv('Lab3.csv')
+labData$Age <- factor(labData$Age, level = c(1, 2, 3), labels = c('60-69', '70-79', '>80'))
+labData$Condition <- factor(labData$Condition, level = c(1, 2, 3), labels = c('task1', 'task2', 'task3'))
+labDataNew <- table(labData$Condition, labData$Age)
+labDataNew
+```
+
+3. Use the data “Lab 3” with the research question to perform a fine report.
+
+*age “1”:60-69, “2”: 70-79 and “3”: above 80.
+
+```{r, summary of lab data}
+library('ggplot2')
+summary(labData)
+var(labDataNew)
+cor(labDataNew)
+```
+
+```{r, skewness}
+library(moments)
+agostino.test(labData$Performance_score)
+```
+```{r, normality test}
+shapiro.test(labData$Performance_score)
+```
+
+```{r, normality graph}
+qqnorm(labData$Performance_score)
+qqline(labData$Performance_score)
+```
+
+```{r, point graph}
+library('ggplot2')
+ggplot(data = labData, aes(x = Age, y = Condition, color = Performance_score)) + geom_point()
+```
+
+
+```{r, Bartlett variance equlity check between Performance Score and Age}
+bartlett.test(labData$Performance_score, labData$Age)
+tapply(labData$Performance_score, labData$Age, var)
+```
+
+```{r, Bartlett variance equlity check between Performance Score and Condition}
+bartlett.test(labData$Performance_score, labData$Condition)
+tapply(labData$Performance_score, labData$Condition, var)
+```
+
+```{r, anova}
+summary(aov(Performance_score ~ Age + Condition, data = labData))
+plot(aov(Performance_score ~ Age + Condition, data = labData))
+```
+
+```{r, anova for interaction between the variables}
+anovaInteraction = aov(Performance_score ~ Age * Condition, data = labData)
+summary(aov(Performance_score ~ Age * Condition, data = labData))
+plot(aov(Performance_score ~ Age * Condition, data = labData))
+```
+
+  Conclusion:
+  
+    By looking at the desity graphs, the data looks like attaining nearly normality. in further analysis from the agostino skewness test p-value = 0.6457 which is greater than 0.05, skew = -0.11171 even though skew value shows the negative skewness but it very minimal and from the shapiro normality test where p-value = 0.09018, which clearly rejects the alernative hypothesis. While I ran Bartlett's variance equlity check variance between the means between Performance and conditions and Age separately I found the analysis rejecting the alternative hypothesis. where p-values are greater than 0.05.
+
+    Bartlett's variance equlity check between Performance Score and Age (p-value = 0.589)
+    Bartlett's variance equlity check between Performance Score and Condition (p-value = 0.9306)
+    
+    Then from the anaalysis of variance (ANOVA), the test analysis supporting the alternative hyposthesis. where the p-value is less than the <0.05 and f-values are very high.
+    Age: f(2,80) = 405.411, pvalue = <2e-16
+    condition: f(2,80) = 313.645, pvalue = <2e-16
+    Age:Condition: f(4,80) = 2.961, pvalue = 0.0246
+    
+    when graphs are consider the performance score of three different age group dcreasing evetually from task to task and viceversa. from the Cooks's distance plot, it is observed that the outliers are inside the approximate value. which hleps to clarify that the normal Q_Q graph attains nearly linearity and also outliers are very close to the normality line. 

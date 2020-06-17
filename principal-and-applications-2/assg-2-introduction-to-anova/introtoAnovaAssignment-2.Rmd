@@ -1,0 +1,96 @@
+---
+title: "Introduction to Anova (Assignment - 2)"
+author: "Pradeep Paladugula"
+date: "5/12/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Q1) Espresso Data
+  
+    #Variables
+    1) Brewing method (1, 2 and 3) - categorical method
+    2) amount fo Creme produced
+    
+    Hypothesis:
+    H0: thier is significant diffence in creame production from three different Brewing methods
+    H1: Diffrence is seen in production of creme from method to method 
+    
+    Summary:
+    the main reson of this assignment is to work and understand Anova where I considered the Espresso Creme production data between three different brewing methods. I have formated data of categorical variable with method levels. Even though the data appears nearly normal on density normality plot, I have noticed a small skewness in the graph. From agostino test (skew = 0.54679, p-value = 0.1842) as the skewness is not equal to zero, so it can proved that the data has skewness and p-value is greater than the 0.05 which clarifys that the data significantly normal and supports the null hypothesis, which the analaysis is not that clear. The normal curve of the cereme shows the data is not normal, even though if we consider the data is normal. So for the further analysis I have conducted the shapiro normality test (W = 0.92201, p-value = 0.04414) where p-value is less than the 0.05 which says the means of the group is not equal so it supports the alernative hypothesis. from the bartlett test (Bartlett's K-squared = 0.96331, df = 2, p-value = 0.6178) the p-value is greater than 0.05, that defines us that their is no much difference in variance between group variables. from Anova test if we consider (F value = 28.41 Pr(>F) =  4.7e-07 ***) the f value has got the higher value and p-values is less than the 0.05 that supports the alternative hypothesis. 
+```{r, Espresson Data}
+esprsoData <- read.csv('EspressoData.csv')
+esprsoData
+#Formating the data
+esprsoData$brewmethod <- as.factor(esprsoData$brewmethod)
+str(esprsoData)
+summary(esprsoData)
+
+plot(density(esprsoData$cereme))
+abline(0,0, v = 0)
+```
+
+
+```{r, checking the skewness}
+library(moments)
+agostino.test(esprsoData$cereme)
+```
+
+```{r, normality test}
+shapiro.test(esprsoData$cereme)
+```
+
+```{r, qqplot}
+qqnorm(esprsoData$cereme)
+qqline(esprsoData$cereme)
+```
+
+```{r, additivity and Homoscedasticity}
+linearRegression = lm(cereme ~ brewmethod, data = esprsoData) 
+standardized = rstudent(linearRegression) 
+fitted = scale(linearRegression$fitted.values)
+summary(linearRegression, correlation = T)
+
+linearRegressionModal = lm(cereme ~ brewmethod, data=esprsoData) 
+residual = resid(linearRegressionModal)
+plot(esprsoData$brewmethod, residual, ylab= "Residuals", xlab = "brewmethod", main = "Title") 
+abline(0, 0)
+
+qqnorm(standardized) 
+abline(0,1)
+```
+
+```{r, bartels variance equlity check}
+bartlett.test(esprsoData$cereme, esprsoData$brewmethod)
+tapply(esprsoData$cereme, esprsoData$brewmethod, var)
+
+plot(fitted, standardized) 
+abline(0,0, v = 0)
+```
+
+```{r, anova}
+summary(aov(cereme ~ brewmethod, data = esprsoData))
+```
+
+```{r, post Hoc test}
+model <- aov(cereme ~ brewmethod, data = esprsoData)
+
+TukeyHSD(model)
+```
+
+```{r, effect size}
+library(pastecs)
+library(compute.es)
+
+by(esprsoData$cereme, esprsoData$brewmethod, stat.desc)
+
+modal12 <- mes(32.4, 61.3, 7.3, 10.1, 9, 9)
+modal12
+modal13 <- mes(32.4, 39.7, 7.3, 7.7, 9, 9)
+modal13
+modal23 <- mes(61.3, 39.7, 10.1, 7.7, 9, 9)
+modal23
+```
