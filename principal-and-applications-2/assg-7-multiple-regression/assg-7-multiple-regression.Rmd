@@ -1,0 +1,111 @@
+---
+title: "Assginment-7 Multiple Regression"
+author: "Pradeep Paladugula"
+date: "6/23/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+    Q1. Why are we concerned with multicollinearity?
+    
+    Solution: Firstly we will understand what is collinearity mean. Two variables are said perfectly collinear if there is an exact linear relationship between them. 
+       Now Multicollinearity means two or more variables in a multiple regression model are highly linearly related. The key role of regression analysis is to isolate the relationship between        the independent variable and dependent variable. We can change the values of the independent variable and not on others. When independent variables are correlated, It indicates that           the change in one variables are associated with the changes in anothe variable. The stronger the correlation, the more difficult is to change one variable without changing other. 
+       
+        we are concerned with Multicollinearity because these causes:
+        1. MC reduces the precision of the estimate coefficiets. It also wekens the p-value to identify independent variables that are statistically significant.
+        2. The cofficients become very sensitive even for small changes in the model/data.
+        3. It gets difficult to find out the actual effect of each variable.
+        
+        using variance inflation factor(VIF) identifies correlation between independent variables and the strength of that correlation. It is very simplest test to assess multicolnearity. 
+        
+        
+        
+        
+    Q2. How might we sift through predictors to find the best set of predictors for our model?
+    
+    Solution: Predictor variables are also know as independent variables or input variables.
+        1. if we are identifying only one predictor variable for the model, we can predict the the best independent variable using correlation plot. (NOTE: (y=mx+b) which of the variables                        have an impact on the 'x' independent variable that correlates with 'y' tehe most.)
+        2. If we have to identify multiple predictor variables from the model, multiple regression analysis is most appropriate to find the most fit predictors.
+            a) the predictor variable with the largest absolute value for the standardized coefficient.
+            b) the predictor variable that is associated with the greatest increase in R-squared.
+            c) Low p-values don’t necessarily identify predictor variables that are practically important.
+
+
+
+
+    Q3. If we run an ANOVA(model1, model2) and the p-value is greater than .05 what does this mean?
+    
+    Solution: If p value is greater than 0.05, then the modal non significant and we should reject the modal from considerations.
+
+
+
+
+    Q4. Use the in-class practice data to write a summary. (Just submit Summary, no code needed for submission) Use "RegressionExample.xlsx" file in Module 8.
+    
+    Solution: A linear regression model was conducted to predict ad's rating increase, based on the ad's and ages of two different sex groups acting in the ad's. All the regression assumptions        were met, and no further adjustments made. A significant regression equation was found (F(2,501) = 1332, p < .001), with an R-square of .84, which suggests that 84% of the variance of         ad's rating increased can be explained by the two predictors. Both ad (t = 50.659, p < .001. b = 29.33) and Age (t = -7.82, p < .001, b = -0.023) were statistically significant. The           result suggested that ad's predicts that for every number of ad, there is a 29.33% increase in ad's rating. Besides, Age also predicts that for every certain age groups there is only a        0.23% increase in  ad's rating. And the negative sign of estiamte value indicates that as the increase in the age groups thier is a decrease in the ad's rating.
+
+
+
+
+    Q5. Research Question: Determine whether how many times the ad is watched and if age can significantly predict rating.
+    
+    solution: From my prediction: From ANOVA method between model2 and model3. The result shows the DF of 1 (indticating an additional parameter) and very small p-value(<0.001). this means            that adding the age IV to the model2 did lead to significantly improved fit over the model2. I conclude that the ad IV variable was watched twice in this analysis.
+
+
+```{r}
+library(xlsx)
+library(ggplot2)
+library(car)
+library(readxl)
+cdata <- read_excel('RegressionExample.xlsx')
+cdata
+
+cor(cdata$Rating, cdata$Ad, use = "complete.obs", method = "pearson")
+cor.test(cdata$Rating, cdata$Ad, method = "pearson")
+```
+```{r, density plot}
+plot(density(cdata$Rating))
+```
+```{r, scatter plot between age adn rating }
+ggplot(cdata, aes(x=Age, y=Rating)) +
+  geom_point(size=2, shape=23)+
+  geom_smooth()
+```
+
+```{r, scatter plot between ad and rating}
+ggplot(cdata, aes(x=Ad, y=Rating)) +
+  geom_point(size=2, shape=23)+
+  geom_smooth(method = 'loess')
+```
+
+```{r, model 1}
+model <- lm(Rating ~ Ad*Age, cdata)
+model
+summary(model)
+BIC(model)
+vif(model)
+```
+
+```{r, model 2}
+model2 <- lm(Rating ~ Ad, cdata)
+model2
+summary(model2)
+BIC(model2)
+```
+
+```{r, model 3}
+model3 <- lm(Rating ~ Ad + Age, cdata)
+model3
+summary(model3)
+BIC(model3)
+vif(model3)
+```
+```{r, normality test}
+shapiro.test(model$residuals)
+```
+```{r, anova of variables}
+anova(model2, model3)
+```

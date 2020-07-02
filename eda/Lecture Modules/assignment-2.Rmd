@@ -1,0 +1,283 @@
+---
+title: "Untitled"
+author: "Pradeep Paladugula"
+date: "5/19/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, data}
+library('xlsx')
+library('Quandl')
+#crimeData <- read.csv('crimedata.csv')
+houseData = read.csv('houses-1.csv')
+incomeData = read.csv('income-1.csv')
+expensiveHouseData = read.csv('houses-1.csv', sql="select * from  where hoses > 20000", ncol("\n"))
+mtcarsData = data(mtcars)
+musicData = read.table('music-1.txt')
+housexlsData = read.xlsx('housesExcel-1.xlsx', 1)
+hdata = read.csv('heights.csv')
+crimeData = read.csv('crimedata.csv')
+#environmentalCars = mtcarsData[mtcarsData$mpg>20]
+#nonEnvironmentalcars = mtcarsData[mtcarsData$mpg<20]
+AAPLData = Quandl("WIKI/AAPL")
+AAPLData
+
+a = c(2,4,6,8)
+b = c("Joe", "Bob", "Jim", "Tom")
+c = c(T, F, F, T)
+d = factor(c("big", "small", "small", "big"))
+
+library('dplyr')
+df = data.frame(a,b,c,d)
+glimpse(df)
+
+df2 = data.frame(a,b,c,d, stringsAsFactors = F)
+glimpse(df2)
+
+x = c(1,2,NA,4)
+sum(x)
+sum(is.na(x))
+
+y = c(2,2,3,4)
+df = data.frame(x, y)
+df
+summary(df)
+
+colSums(na.omit(df))
+colSums(df, na.rm =T)
+df$x[is.na(df$x)] = mean(na.omit(df$x))
+df$x
+colSums(df)
+
+x = c(0.1,0.7,0.3,0.9)
+highLow = ifelse(x>0.5, "High", "Low")
+highLow
+
+crimeData
+```
+
+```{r, module 4}
+mod4Data <- read.csv('companies.csv')
+mod5avg <- read.csv('avgpm25.csv')
+mod5nyc <- read.csv('ny.csv')
+str(mod4Data)
+
+```
+
+```{r, Mod 6}
+nydata <- read.csv('ny.csv')
+
+
+```
+
+```{r, ggplot2}
+maacs <- read.csv('maacs.csv')
+maacs2 <- read.csv('maacs2.csv')
+
+```
+
+```{r, }
+runif(1)
+
+set.seed(345)
+runif(1)
+runif(2)
+
+library(ggplot2)
+bikedata <- read.csv('bikeVendors.csv')
+tvandexcercise <- read.csv('TVAndExercise.csv')
+set.seed(1234)
+
+kMeansResult = kmeans(tvandexcercise, centers = 2)
+#View results
+kMeansResult$cluster
+
+#####Slide 20 Solution#####
+###########################
+#Setup
+
+#Clear workspace
+rm(list=ls())
+#Clear plots
+dev.off()
+
+#Set working directory
+setwd("C:\\Users\\Owner\\Documents\\ANLY\\EDA\\Lectures\\2nd Executive Format Fall18")
+#Read in data
+TVExercise = read.csv("TVAndExercise.csv")
+
+#Pre-process data
+#Use person names as row names - creates plot labels
+row.names(TVExercise) = TVExercise$X
+#Drop first column with person names (optional)
+TVExercise = TVExercise[,-1]
+#Rename variables (optional)
+names(TVExercise)=c("Exercise","TV")
+
+#Hierarchical Clustering
+
+#Calculate dendrogram
+if (!require('dendextend')){install.packages('dendextend')}
+dendrogram =
+as.dendrogram(
+hclust(
+dist(
+TVExercise
+)
+)
+)
+#Plot dendrogram
+plot(dendrogram)
+
+
+#####Slide 30#####
+#Generate random number
+runif(1)
+#Set seed
+set.seed(345)
+runif(1)
+runif(1)
+
+#####Slide 32 Solution#####
+########################### 
+#K Means Clustering
+
+#Set seed for reproducability
+set.seed(1234)
+#Calculate clusters
+kMeansResult = kmeans(TVExercise, centers = 2)
+#View results
+kMeansResult$cluster
+
+#Create scatterplot
+TVExercise$cluster=kMeansResult$cluster
+if (!require('ggplot2')){install.packages('ggplot2')}
+library(ggplot2)
+
+plot = ggplot(data=TVExercise,aes(x=Exercise,y=TV))+geom_point()
+plot
+#Color based on cluster
+plot + aes(color=cluster)
+
+
+#####Slide 36#####
+#Setup
+
+#Clear workspace
+rm(list=ls())
+#Clear plots
+dev.off()
+#Set working directory
+setwd("C:\\Users\\Owner\\Documents\\ANLY\\EDA\\Lectures\\2nd Executive Format Fall18")
+#Read in data
+bikes = read.csv('bikeVendors.csv')
+
+#Pre-Processing
+
+#Separate cluster data and overlay data
+overlayData=bikes[ , 1:5]
+clusterData=bikes[ , -(1:5)]
+#Transpose so vendors are observations, models are columns
+clusterData=t(clusterData)
+#Set column names to make data more interpretable
+colnames(clusterData)=bikes$model
+#Validate proportions sum to 1
+rowSums(clusterData)
+
+
+#####Slide 38 Solution#####
+###########################
+#Hierarchial calculation
+
+#Calculate
+hClustResult=hclust(dist(clusterData))
+
+#Create dendrogram of data
+if (!require('dendextend')){install.packages('dendextend')}
+myDendrogram=as.dendrogram(hClustResult)
+plot(myDendrogram)
+
+#***Make sure that any current pdf plot is closed or this won't work***#
+#Create big pdf to be able to zoom into dendogram
+#Use this to determine number of clusters
+pdf("bigDendogram.pdf", width=40, height=15)
+plot(myDendrogram)
+dev.off()
+
+#K means calculation
+
+#Calculate
+set.seed(1234)
+kMeansResult = kmeans(clusterData, centers = 6, nstart=20)
+
+#Compare results
+
+#Extract kmeans clusters assigned
+clustersAssigned = data.frame(kMeans = kMeansResult$cluster)
+#Extract hierarchial clusters assigned
+clustersAssigned$Hierarchial = cutree(hClustResult, k = 6)
+#Open clustersAssigned dataset. click on kMeans column to sort it.
+#Compare assignments of both.
+#Notice that what kmeans calls cluster1, hierarchial calls cluster5.
+#What kmeans calls cluster2, hierarchial calls cluster1. etc.
+#The numbers that are assigned are irrelevant. If the same observations are in the same clusters,
+#then it is the same.
+#Also notice that even though there are 6 clusters for both, the clusters are slightly different.
+
+
+#####Slide 40##### 
+#Determine optimal number of clusters
+set.seed(1234)
+if(!require('factoextra')){install.packages('factoextra')}
+library(factoextra)
+#Elbow method
+fviz_nbclust(clusterData, kmeans, method = "wss", nstart=20)
+
+
+#####Slide 41##### 
+#Silhoutte method
+fviz_nbclust(clusterData, kmeans, method = "silhouette", nstart=20)
+
+
+#####Slide 42#####
+#Gap stat
+if(!require('cluster')){install.packages('cluster')}
+gap_stat <- clusGap(clusterData, FUN = kmeans, K.max=29, nstart=20)
+fviz_gap_stat(gap_stat)
+
+
+#####Slide 43##### 
+#Calculate with final number of clusters
+set.seed(1234)
+kMeansResult = kmeans(clusterData, centers = 9)
+
+
+#####Slide 44#####
+if(!require('dplyr')){install.packages('dplyr')}
+#Pull out locations of final centroids
+centers = data.frame(t(kMeansResult$centers))
+#Combine with overlay data
+results = bind_cols(overlayData,centers)
+#Redefine price as factor variable
+results$price = ifelse(results$price>mean(results$price), "High", "Low")
+results$price = as.factor(results$price)
+#Top 10 models for bike vendors in Cluster 1
+cluster1=arrange(results,by=desc(X1))[1:10,1:5]
+
+
+#####Slide 45 Solution#####
+###########################
+cluster2=arrange(results,by=desc(X2))[1:10,1:5] 
+cluster3=arrange(results,by=desc(X3))[1:10,1:5]
+cluster4=arrange(results,by=desc(X4))[1:10,1:5]
+cluster5=arrange(results,by=desc(X5))[1:10,1:5]
+cluster6=arrange(results,by=desc(X6))[1:10,1:5]
+cluster7=arrange(results,by=desc(X7))[1:10,1:5]
+cluster8=arrange(results,by=desc(X8))[1:10,1:5]
+cluster9=arrange(results,by=desc(X9))[1:10,1:5]
+
+```
