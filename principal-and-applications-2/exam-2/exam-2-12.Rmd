@@ -1,0 +1,55 @@
+---
+title: "exam-2-12"
+author: "Pradeep Paladugula"
+date: "7/17/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r, data}
+library('tidyverse')
+library("readxl")
+appData <- read_excel('Application1.xlsx')
+str(appData)
+```
+
+```{r, scaterplot}
+library(car)
+scatterplot(appData$classsize,appData$educationscore)
+scatterplot(appData$classsize,appData$budget)
+scatterplot(appData$educationscore,appData$budget)
+```
+
+
+```{r, examinig the correlation}
+cor(appData$classsize, appData$educationscore, method = "pearson")
+```
+
+
+
+```{r, correlation test}
+cor.test(appData$classsize, appData$educationscore, method = "pearson", conf.level = .95)
+```
+
+```{r}
+cor(appData$classsize, appData$budget, method = "pearson")
+```
+
+```{r, }
+cor.test(appData$classsize, appData$budget, method = "pearson", conf.level = .95)
+```
+
+```{r, control the potential third-party effect }
+data <- appData[, c("budget", "educationscore", "classsize")]
+cor(data)
+```
+
+```{r}
+library(ppcor)
+pc <- pcor(data, method = c("pearson"))
+pc
+```
+
+Summary: The correlation test was conducted to test to predeict whether the class size and school budget have siginificant correlations with the students performance. the Pearson's correlation test shows the correlation between the class size and eductionscore (r = -0.507, t(10318) = -59.713, p-value = <0,01) are statistically significant, whic denotes lesser the classsize higher the education score. the correlation between the class size and budget (r = -0.103, t(10318) = -10.554, p-value = <0,01) are statistically significant, whic denotes lesser the classsize higher the budget. The correaltion between the classsize and education score while controlling tehe budget (r = -0.5.8, p<0.01, t(10320)= -59.87) which is also a statistically significant. 

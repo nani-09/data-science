@@ -281,3 +281,32 @@ cluster8=arrange(results,by=desc(X8))[1:10,1:5]
 cluster9=arrange(results,by=desc(X9))[1:10,1:5]
 
 ```
+
+```{r, module 9}
+wine <- read.csv("wine.csv")
+glimpse(wine)
+summary(wine)
+X <- wine[,-1]
+summary(wine)
+wine_sacled <- scale(wine)
+winePCA <- prcomp(X)
+summary(winePCA)
+X_new <- winePCA$x[,(1:5)]
+head(X_new)
+weights <-winePCA$rotation[,(1:5)]
+head(weights)
+weight_total <- data.frame(colSums(weights^2))
+
+EU <- read.csv("EU.csv")
+library(dplyr)
+glimpse(EU)
+```
+
+```{r, module 10}
+titanic <- read.csv('titanic.csv', header = T, na.strings = c(""))
+str(titanic)
+sapply(titanic, function(x) length(unique(x)))
+
+
+
+```

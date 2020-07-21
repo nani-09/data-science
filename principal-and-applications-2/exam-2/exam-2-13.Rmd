@@ -1,0 +1,85 @@
+---
+title: "exam-2-13"
+author: "Pradeep Paladugula"
+date: "7/17/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, date}
+library('tidyverse')
+library("readxl")
+appData2 <- read_excel('Application2.xlsx')
+appData2
+```
+```{r, checking whether we have complete predictors}
+with(appData2, table(Major, Degree, Condition))
+```
+```{r, cleaning the data}
+appData2$Major <- factor(appData2$Major)
+appData2$Degree <- factor(appData2$Degree)
+appData2$Condition <- factor(appData2$Condition)
+```
+```{r, modal1}
+model1 <- glm(Condition~Major, data = appData2, family = "binomial")
+model1
+summary(model1)
+```
+```{r modal2}
+model2 <- glm(Condition~Major+Degree, data = appData2, family = "binomial")
+model2
+summary(model2)
+#as modal cantains two or more terms
+#vif(model2)
+```
+
+```{r, compare modal 1 to a null modal}
+modelchi1 <- model1$null.deviance-model1$deviance
+modelchi1
+cdf1 <- model1$df.null-model1$df.residual
+cdf1
+chisqp1 <- 1 - pchisq(modelchi1, cdf1)
+chisqp1
+```
+
+```{r, compare modal 2 to a null modal}
+modelchi2 <- model2$null.deviance-model2$deviance
+modelchi2
+cdf2 <- model2$df.null-model2$df.residual
+cdf2
+chisqp2 <- 1 - pchisq(modelchi2, cdf2)
+chisqp2
+```
+
+```{r, anova}
+anova(model1, model2)
+anova(model1, model2, test = "Chisq")
+```
+
+
+```{r, test our models}
+R2.hl1 <- modelchi1/model1$null.deviance
+R2.hl1 
+R2.hl2 <- modelchi2/model2$null.deviance
+R2.hl2 
+```
+
+```{r, calculating odds ratio model 1}
+model1$coefficients
+exp(model1$coefficients)
+exp(confint(model1))
+```
+
+```{r, calculating odds ratio model 2}
+model2$coefficients
+exp(model2$coefficients)
+exp(confint(model2))
+```
+
+
+Summary:
+A logistic regression model was conducted to predict whether an individual’s starting Condition(salary) is low or high depend on major and degree. Both intercept(b= -0.7388, z value = -7.336, p-value =  <0.001), MajorEducation (b = 0.1727,z-avlue = 1.519, p = 0.12883(>0.05)) and MajorMath (b= 0.1225, z-value, 1.069, p-value = 0.28524 (>0.05)) which are not statistically significant. The odds ratio of Education is 0.0.95, suggesting people studies education have a 0.95 times of chance of receive high starting salary than those who didn’t. The odds ratio of Math is 0.90, suggesting people studies Math have a 0.90 times of chance of receive high starting salary than those who didn’t. The odds ratio of highschooler is 1.014, suggesting people has a high school degree have a 00.14 times of change of receive high starting salary. The odds ratio of Master’s degree is 0.54, suggesting people has a Master’s degree have a 0.54 times of change of receive high starting salary. Because DegreeHighSchool(b =0.2293, x-value =2.085, p-value=0.03704) and DegreeMaster(b =-0.3772,  z-value = -3.218, p-value = 0.00129) were statistical significant.
+

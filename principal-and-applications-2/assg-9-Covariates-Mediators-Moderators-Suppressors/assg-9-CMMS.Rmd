@@ -1,0 +1,46 @@
+---
+title: "Assignment-9 Covariates: Moderators, Mediators, and Suppressors "
+author: "Pradeep Paladugula"
+date: "7/3/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. What is the difference between moderation and interaction?
+
+Mathematically, the effects for every moderations and interactions are similar to each other. But statistically, 'interaction' is associated more with ANOVA, and 'moderator variable' is more associated with multiple regression modal/ regression modal.
+
+Interaction: A interaction effect means that the effect of predictor variable X on response variable Y depends on the level of a third variable, say, Z.
+
+Moderation: moderation distinguishes between the roles of the two variables involved in the interaction. There is specific role of X and Z, one (let X) is assigned as predictor and other (variable Z) is assigned as moderator (or moderating variable). Deciding the role of variables as predictor or moderator depends on researcher’s interest1. Here the impact of predictor (on response variable Y) is of primary interest and moderator effects this relationship. So the idea is that we’re not really interested in whether Z predicts Y on its own.  We’re really interested in how it changes the primary effect of X on Y.
+
+2. What is a suppressor variable and how it's it different than typical problems with multicollinearity?
+
+Suppressor variable: suppressor is a variable which inclusion strengthens the effect of another independent variable on the dependeant variable. A suppresor variable has been defined as a predictor that has zero correlation with the dependent variable. Supression is very intersting that it truly reveals conclusions that would never be reached on the basis  of examning only bivariante relationships. 
+
+MultiCollinearity: Multicollinearity reduces the true correlations to the dependant variable because of the shared correlations between the IVs. The suppressor variable serves to increase the correlation between an IV and the DV variable via it’s statistical relationship with the IV. 
+
+3. Why would we perform a mediation analysis?
+
+Firstly Mediating variable transmits the effect of an independent variable on a dependent variable.
+
+A test of mediation examines whether the effect of the independent variable (x) on the dependent variable (y) occurs via a third, intervening variable (z). While mediation analysis primarily for two purposes: to understand how certain relationships (including treatment effects) occur, and to identify possible targets for future interventions. 
+
+
+References:
+Question1:
+- https://learnerworld.tumblr.com/post/147085936920/interaction-moderationenjoystatisticswithme
+
+Question2:
+- https://files.eric.ed.gov/fulltext/EJ854292.pdf
+- https://learnerworld.tumblr.com/post/147089718705/mediationmoderationinteractionenjoystatisticswithme
+- https://learnerworld.tumblr.com/post/147085936920/interaction-moderationenjoystatisticswithme
+- https://files.eric.ed.gov/fulltext/ED426097.pdf
+
+Question3:
+- https://data.library.virginia.edu/introduction-to-mediation-analysis/
+- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2819368/
+
