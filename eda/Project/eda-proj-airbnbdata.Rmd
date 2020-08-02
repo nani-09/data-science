@@ -1,0 +1,99 @@
+---
+title: "EDA Project work airbnb"
+author: "Pradeep Paladugula"
+date: "7/27/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, airbnb data}
+library('dplyr')
+library('car')
+
+airbnbData <- read.csv('AB_NYC_2019.csv')
+str(airbnbData)
+newAirbnbData <- airbnbData[,c(5,9,10,11,12,15,16)]
+ssAirbnbData <- subset(newAirbnbData, price > 0)
+
+
+ssAirbnbData$neighbourhood_group <- factor(ssAirbnbData$neighbourhood_group)
+ssAirbnbData$price <- log(ssAirbnbData$price)
+
+model <- lm(price ~ neighbourhood_group + room_type + minimum_nights + number_of_reviews + calculated_host_listings_count + availability_365 , data = ssAirbnbData)
+summary(model)
+BIC(model)
+AIC(model)
+vif(model)
+
+model1 <- lm(price ~ neighbourhood_group + room_type + minimum_nights + number_of_reviews + availability_365 , data = ssAirbnbData)
+summary(model1)
+BIC(model1)
+AIC(model1)
+vif(model1)
+
+model2 <- lm(price ~ neighbourhood_group + room_type + minimum_nights + number_of_reviews, data = ssAirbnbData)
+summary(model2)
+
+model3 <- lm(price ~ neighbourhood_group + room_type + minimum_nights + availability_365, data = ssAirbnbData)
+summary(model3)
+
+model4 <- lm(price ~ neighbourhood_group + room_type + number_of_reviews + availability_365, data = ssAirbnbData)
+summary(model4)
+
+model5 <- lm(price ~ neighbourhood_group + room_type + minimum_nights, data = ssAirbnbData)
+summary(model5)
+
+model6 <- lm(price ~ neighbourhood_group + room_type + availability_365, data = ssAirbnbData)
+summary(model6)
+
+anova(model1, model3)
+cutoff <- 4/((nrow(ssAirbnbData)-length(model1$residuals)-1))
+
+library('base')
+cooksd <- cooks.distance(model1)
+
+influential <- as.numeric(names(cooksd)[(cooksd > (4/nrow(ssAirbnbData)))])
+
+# Alternatively, you can try to remove the top x outliers to have a look
+# top_x_outlier <- 2
+# influential <- as.numeric(names(sort(cooksd, decreasing = TRUE)[1:top_x_outlier]))
+
+airbnbNoOutliers <- ssAirbnbData[-influential, ]
+str(airbnbNoOutliers)
+
+model1_new <- lm(price ~ neighbourhood_group + room_type + minimum_nights + number_of_reviews + availability_365 , data = airbnbNoOutliers)
+summary(model1_new)
+BIC(model1_new)
+AIC(model1_new)
+vif(model1_new)
+
+predicted_values <- model1_new$fitted.values
+airbnbNoOutliers$predicted_values <- predicted_values
+
+head(airbnbNoOutliers)
+
+qqplot(predicted_values, model1_new$residuals)
+qqline(predicted_values, model1_new$residuals)
+```
+
+Technical Approch:
+
+Data cleaning (total observations reduced from 48895 to 46915). Used logarithmic regression to reduced the skewness in the data
+
+Used multiple regression model to prove the conclusion. Applied linear regression model on the specifically chosen columns from the data. Considered price (dependent variable) and neighbourhood_group, room_type, minimum_nights, number_of_reviews, availability_365 (Independent variable/predictors). Calculated_host_listings_count was not consider as it was statistically insignificant. 
+
+Used cook's distance to find the outliers. And upon removed the outliers from the in the data
+
+Using ANOVA method choose the best model. And conduct experiment to find out how models behaved before and after  removal of outliers.
+
+Finally explained various factors why the variance in price of listing can be explained by 5 predictors mentioned above.
+
+
+
+Conclusion:
+
+A Linear regression model was conducted to predict price variations, based on the neighbourhood_group, room_type, minimum_nights, number_of_reviews, availability_365 observations. All the regression assumptions were met. A significant regression equation was found (F(10,48873)=4385, p-value < 0.001, R^2 value = 0.4729, BIC = 72432, AIC = 72326). The best fit model was analysed without calculated_host_listings_count and before and after outliers were removed. Model1 before outliers were removed (F(10,48873)=4385, p-value < 0.001, R^2 value = 0.4729, BIC = 72422, AIC = 72325). Model1 after Outliers removed (F(10,46905)=5359, p-value < 0.001, R^2 value = 0.507, BIC = 62866, AIC = 62770). When compared the output of Model1 before and after outliers removed, the results suggested that the 50% of variance in price of listing can be explained by 5 predictors namely neighbourhood_group, room_type, minimum_nights, number_of_reviews, availability_365.
+

@@ -1,0 +1,15 @@
+---
+title: "eda-quiz-3"
+author: "Pradeep Paladugula"
+date: "7/27/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, data}
+dbdata <- read.delim('diabetesData.txt')
+```
